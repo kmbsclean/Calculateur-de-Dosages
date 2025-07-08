@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        .calculator {
+            font-family: Arial, sans-serif;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 100%;
+            margin: 20px auto;
+            box-sizing: border-box;
+            width: 90%;
+            background-color: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        h3 {
+            color: #2c3e50;
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        #results {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            border: 1px solid #eee;
+        }
+
+        #results h4 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+            font-size: 1.2rem;
+        }
+
+        #ingredients-list {
+            list-style-type: none;
+            padding-left: 0;
+            margin-bottom: 0;
+        }
+
+        #ingredients-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #ingredients-list li:last-child {
+            border-bottom: none;
+        }
+
+        #ingredients-list strong {
+            color: #3498db;
+        }
+
+        @media (min-width: 600px) {
+            .calculator {
+                width: 500px;
+                padding: 25px;
+            }
+            
+            .form-group {
+                display: flex;
+                align-items: center;
+            }
+            
+            .form-group label {
+                width: 150px;
+                margin-bottom: 0;
+                margin-right: 15px;
+            }
+            
+            .form-group select {
+                flex: 1;
+            }
+        }
+
+        @media (min-width: 768px) {
+            .calculator {
+                width: 600px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h3>Calculateur de Dosages</h3>
+        
+        <div class="form-group">
+            <label for="product">Produit :</label>
+            <select id="product">
+                <option value="savon">Savon Liquide</option>
+                <option value="javel">Eau de Javel</option>
+                <option value="adoucissant">Adoucissant</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="volume">Volume à fabriquer :</label>
+            <select id="volume">
+                <option value="1">1 Litre</option>
+                <option value="5">5 Litres</option>
+                <option value="20">20 Litres</option>
+            </select>
+        </div>
+
+        <div id="results">
+            <h4>Ingrédients nécessaires :</h4>
+            <ul id="ingredients-list">
+                <!-- Résultats dynamiques ici -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const recipes = {
+            savon: {
+                name: "Savon Liquide",
+                ingredients: [
+                    { name: "Soude caustique (g)", baseQty: 30 },
+                    { name: "Huile de palmiste (ml)", baseQty: 100 },
+                    { name: "Texapon N70 (ml)", baseQty: 100 }
+                ]
+            },
+            javel: {
+                name: "Eau de Javel",
+                ingredients: [
+                    { name: "Hypochlorite de calcium (g)", baseQty: 40 },
+                    { name: "Soude caustique (g)", baseQty: 10 }
+                ]
+            },
+            adoucissant: {
+                name: "Adoucissant Textile",
+                ingredients: [
+                    { name: "Behentrimonium methosulfate (g)", baseQty: 40 },
+                    { name: "Eau distillée (ml)", baseQty: 900 },
+                    { name: "Parfum (ml)", baseQty: 20 }
+                ]
+            }
+        };
+
+        function updateDosages() {
+            const product = document.getElementById("product").value;
+            const volume = document.getElementById("volume").value;
+            const recipe = recipes[product];
+            
+            let html = "";
+            recipe.ingredients.forEach(ing => {
+                const qty = ing.baseQty * volume;
+                html += `<li><strong>${ing.name}</strong><span>${qty}</span></li>`;
+            });
+            
+            document.getElementById("ingredients-list").innerHTML = html;
+        }
+
+        // Écouteurs d'événements
+        document.getElementById("product").addEventListener("change", updateDosages);
+        document.getElementById("volume").addEventListener("change", updateDosages);
+        
+        // Calcul initial
+        updateDosages();
+    </script>
+</body>
+</html>
